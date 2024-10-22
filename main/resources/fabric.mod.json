@@ -1,0 +1,39 @@
+{
+	"schemaVersion": 1,
+	"id": "murykos-better-ambience",
+	"version": "${version}",
+	"name": "Muryko's Better Ambience",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Muryko Casaril"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/murykos-better-ambience/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.muryko.betterambience.MurykosBetterAmbience"
+		],"client": [
+			"com.muryko.betterambience.MurykosBetterAmbienceClient"
+		],
+		"fabric-datagen": [
+			"com.muryko.betterambience.MurykosBetterAmbienceDataGenerator"
+		]
+	},
+	"mixins": [
+		"murykos-better-ambience.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.7",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}

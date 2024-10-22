@@ -1,0 +1,322 @@
+{
+  "biomes": {
+    "minecraft:badlands": {
+      "fogStart": 0.0,
+      "fogEnd": 200.0,
+      "fogColor": [0.55, 0.35, 0.2]
+    },
+    "minecraft:bamboo_jungle": {
+      "fogStart": 5.0,
+      "fogEnd": 150.0,
+      "fogColor": [0.1, 0.3, 0.1]
+    },
+    "minecraft:basalt_deltas": {
+      "fogStart": 0.0,
+      "fogEnd": 200.0,
+      "fogColor": [0.2, 0.2, 0.2]
+    },
+    "minecraft:beach": {
+      "fogStart": 0.0,
+      "fogEnd": 250.0,
+      "fogColor": [0.6, 0.7, 0.8]
+    },
+    "minecraft:birch_forest": {
+      "fogStart": 10.0,
+      "fogEnd": 225.0,
+      "fogColor": [0.30, 0.4, 0.30],
+      "darkeningFactor": 20
+    },
+    "minecraft:cherry_grove": {
+      "fogStart": 15.0,
+      "fogEnd": 250.0,
+      "fogColor": [0.5, 0.65, 0.7]
+    },
+    "minecraft:crimson_forest": {
+      "fogStart": 0.0,
+      "fogEnd": 140.0,
+      "fogColor": [0.5, 0.1, 0.1]
+    },
+    "minecraft:dark_forest": {
+      "fogStart": 5.0,
+      "fogEnd": 120.0,
+      "fogColor": [0.1, 0.2, 0.1]
+    },
+    "minecraft:deep_dark": {
+      "fogStart": 0.0,
+      "fogEnd": 50.0,
+      "fogColor": [0.05, 0.05, 0.08]
+    },
+    "minecraft:desert": {
+      "fogStart": 0.0,
+      "fogEnd": 200.0,
+      "fogColorDay": [0.7, 0.8, 0.9],
+      "fogColorNight": [0.1, 0.1, 0.2]
+    },
+    "minecraft:dripstone_caves": {
+      "fogStart": 10.0,
+      "fogEnd": 150.0,
+      "fogColor": [0.3, 0.3, 0.25]
+    },
+    "minecraft:end_barrens": {
+      "fogStart": 0.0,
+      "fogEnd": 200.0,
+      "fogColor": [0.2, 0.05, 0.25]
+    },
+    "minecraft:end_highlands": {
+      "fogStart": 0.0,
+      "fogEnd": 200.0,
+      "fogColor": [0.2, 0.05, 0.25]
+    },
+    "minecraft:end_midlands": {
+      "fogStart": 0.0,
+      "fogEnd": 200.0,
+      "fogColor": [0.2, 0.05, 0.25]
+    },
+    "minecraft:eroded_badlands": {
+      "fogStart": 0.0,
+      "fogEnd": 200.0,
+      "fogColor": [0.55, 0.35, 0.2]
+    },
+    "minecraft:flower_forest": {
+      "fogStart": 15.0,
+      "fogEnd": 200.0,
+      "fogColor": [0.6, 0.5, 0.55]
+    },
+    "minecraft:forest": {
+      "fogStart": 10.0,
+      "fogEnd": 200.0,
+      "fogColor": [0.2, 0.3, 0.25]
+    },
+    "minecraft:frozen_ocean": {
+      "fogStart": 20.0,
+      "fogEnd": 250.0,
+      "fogColor": [0.5, 0.6, 0.9]
+    },
+    "minecraft:frozen_river": {
+      "fogStart": 30.0,
+      "fogEnd": 200.0,
+      "fogColor": [0.5, 0.6, 0.75]
+    },
+    "minecraft:frozen_peaks": {
+      "fogStart": 20.0,
+      "fogEnd": 300.0,
+      "fogColor": [0.6, 0.7, 0.9]
+    },
+    "minecraft:grove": {
+      "fogStart": 10.0,
+      "fogEnd": 160.0,
+      "fogColor": [0.4, 0.45, 0.7]
+    },
+    "minecraft:ice_spikes": {
+      "fogStart": 10.0,
+      "fogEnd": 200.0,
+      "fogColor": [0.45, 0.55, 0.7]
+    },
+    "minecraft:jagged_peaks": {
+      "fogStart": 20.0,
+      "fogEnd": 300.0,
+      "fogColor": [0.6, 0.7, 0.9]
+    },
+    "minecraft:jungle": {
+      "fogStart": 5.0,
+      "fogEnd": 175.0,
+      "fogColor": [0.1, 0.3, 0.1]
+    },
+    "minecraft:mangrove_swamp": {
+      "fogStart": 0.0,
+      "fogEnd": 120.0,
+      "fogColor": [0.1, 0.2, 0.1]
+    },
+    "minecraft:meadow": {
+      "fogStart": 20.0,
+      "fogEnd": 220.0,
+      "fogColor": [0.5, 0.4, 0.5]
+    },
+    "minecraft:mushroom_fields": {
+      "fogStart": 5.0,
+      "fogEnd": 150.0,
+      "fogColor": [0.4, 0.35, 0.45]
+    },
+    "minecraft:nether_wastes": {
+      "fogStart": 0.0,
+      "fogEnd": 200.0,
+      "fogColor": [0.45, 0.2, 0.15]
+    },
+    "minecraft:ocean": {
+      "fogStart": 20.0,
+      "fogEnd": 300.0,
+      "fogColor": [0.4, 0.6, 0.8]
+    },
+    "minecraft:lukewarm_ocean": {
+      "fogStart": 20.0,
+      "fogEnd": 300.0,
+      "fogColor": [0.3, 0.65, 0.8]
+    },
+    "minecraft:deep_lukewarm_ocean": {
+      "fogStart": 20.0,
+      "fogEnd": 300.0,
+      "fogColor": [0.3, 0.65, 0.8]
+    },
+    "minecraft:deep_ocean": {
+      "fogStart": 20.0,
+      "fogEnd": 300.0,
+      "fogColor": [0.4, 0.6, 0.8]
+    },
+    "minecraft:warm_ocean": {
+      "fogStart": 20.0,
+      "fogEnd": 300.0,
+      "fogColor": [0.4, 0.6, 0.8]
+    },
+    "minecraft:deep_frozen_ocean": {
+      "fogStart": 20.0,
+      "fogEnd": 250.0,
+      "fogColor": [0.5, 0.6, 0.9]
+    },
+    "minecraft:cold_ocean": {
+      "fogStart": 20.0,
+      "fogEnd": 300.0,
+      "fogColor": [0.4, 0.6, 0.8]
+    },
+    "minecraft:deep_cold_ocean": {
+      "fogStart": 20.0,
+      "fogEnd": 300.0,
+      "fogColor": [0.4, 0.6, 0.8]
+    },
+    "minecraft:old_growth_birch_forest": {
+      "fogStart": 10.0,
+      "fogEnd": 175.0,
+      "fogColor": [0.30, 0.4, 0.30]
+    },
+    "minecraft:plains": {
+      "fogStart": 20.0,
+      "fogEnd": 250.0,
+      "fogColor": [0.5, 0.6, 0.5]
+    },
+    "minecraft:river": {
+      "fogStart": 30.0,
+      "fogEnd": 200.0,
+      "fogColor": [0.5, 0.6, 0.75]
+    },
+    "minecraft:savanna": {
+      "fogStart": 20.0,
+      "fogEnd": 200.0,
+      "fogColor": [0.6, 0.5, 0.4]
+    },
+    "minecraft:savanna_plateau": {
+      "fogStart": 20.0,
+      "fogEnd": 200.0,
+      "fogColor": [0.6, 0.5, 0.4]
+    },
+    "minecraft:stony_shore": {
+      "fogStart": 0.0,
+      "fogEnd": 250.0,
+      "fogColor": [0.6, 0.7, 0.8]
+    },
+    "minecraft:stony_peaks": {
+      "fogStart": 20.0,
+      "fogEnd": 250.0,
+      "fogColor": [0.4, 0.4, 0.4]
+    },
+    "minecraft:small_end_islands": {
+      "fogStart": 0.0,
+      "fogEnd": 200.0,
+      "fogColor": [0.2, 0.05, 0.25]
+    },
+    "minecraft:snowy_plains": {
+      "fogStart": 10.0,
+      "fogEnd": 250.0,
+      "fogColor": [0.45, 0.55, 0.7]
+    },
+    "minecraft:snowy_beach": {
+      "fogStart": 0.0,
+      "fogEnd": 250.0,
+      "fogColor": [0.6, 0.7, 0.8]
+    },
+    "minecraft:snowy_slopes": {
+      "fogStart": 10.0,
+      "fogEnd": 250.0,
+      "fogColor": [0.45, 0.55, 0.7]
+    },
+    "minecraft:snowy_taiga": {
+      "fogStart": 15.0,
+      "fogEnd": 200.0,
+      "fogColor": [0.4, 0.5, 0.55]
+    },
+    "minecraft:sparse_jungle": {
+      "fogStart": 5.0,
+      "fogEnd": 200.0,
+      "fogColor": [0.1, 0.3, 0.1]
+    },
+    "minecraft:soul_sand_valley": {
+      "fogStart": 0.0,
+      "fogEnd": 160.0,
+      "fogColor": [0.2, 0.1, 0.05]
+    },
+    "minecraft:sunflower_plains": {
+      "fogStart": 20.0,
+      "fogEnd": 250.0,
+      "fogColor": [0.5, 0.6, 0.5]
+    },
+    "minecraft:taiga": {
+      "fogStart": 10.0,
+      "fogEnd": 180.0,
+      "fogColor": [0.25, 0.35, 0.35]
+    },
+    "minecraft:old_growth_pine_taiga": {
+      "fogStart": 10.0,
+      "fogEnd": 220.0,
+      "fogColor": [0.3, 0.4, 0.4]
+    },
+    "minecraft:old_growth_spruce_taiga": {
+      "fogStart": 10.0,
+      "fogEnd": 220.0,
+      "fogColor": [0.3, 0.4, 0.4]
+    },
+    "minecraft:the_end": {
+      "fogStart": 0.0,
+      "fogEnd": 150.0,
+      "fogColor": [0.2, 0.05, 0.25]
+    },
+    "minecraft:the_void": {
+      "fogStart": 0.0,
+      "fogEnd": 70.0,
+      "fogColor": [0, 0, 0]
+    },
+    "minecraft:warped_forest": {
+      "fogStart": 0.0,
+      "fogEnd": 140.0,
+      "fogColor": [0.2, 0.3, 0.4]
+    },
+    "minecraft:windswept_forest": {
+      "fogStart": 20.0,
+      "fogEnd": 200.0,
+      "fogColor": [0.4, 0.43, 0.4]
+    },
+    "minecraft:windswept_hills": {
+      "fogStart": 20.0,
+      "fogEnd": 200.0,
+      "fogColor": [0.4, 0.43, 0.4]
+    },
+    "minecraft:windswept_savanna": {
+      "fogStart": 20.0,
+      "fogEnd": 200.0,
+      "fogColor": [0.4, 0.43, 0.4]
+    },
+    "minecraft:windswept_gravelly_hills": {
+      "fogStart": 20.0,
+      "fogEnd": 200.0,
+      "fogColor": [0.4, 0.4, 0.4]
+    },
+    "minecraft:lush_caves": {
+      "fogStart": 20.0,
+      "fogEnd": 70.0,
+      "fogColor": [0.1, 0.15, 0.1]
+    }
+  },
+  "default": {
+    "fogStart": 50.0,
+    "fogEnd": 220.0,
+    "fogColor": [1, 0.5, 0.5]
+  },
+  "fogTransitionTime": 100.0
+}

@@ -1,0 +1,348 @@
+package com.muryko.betterambience.command;
+
+import com.muryko.betterambience.fog.FogBiomeRegistry;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.minecraft.server.command.CommandManager;
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.Text;
+
+public class BetterAmbienceCommands {
+    public static void register() {
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+            dispatcher.register(CommandManager.literal("reloadFog")
+                .executes(context -> {
+                    return reloadFog(context.getSource());
+                }));
+        });
+    }
+
+    private static int reloadFog(ServerCommandSource source) {
+        FogBiomeRegistry.reloadConfig();
+        source.sendFeedback(() -> Text.literal("Configuração de neblina recarregada com sucesso!"), false);
+        return 1;
+    }
+}
+
+package com.muryko.betterambience.fog;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import net.minecraft.registry.BuiltinRegistries;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.util.Identifier;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.world.biome.Biome;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+public class FogBiomeRegistry {
+    private static final Map<RegistryKey<Biome>, FogProperties> BIOME_FOG_MAP = new HashMap<>();
+    private static final Gson GSON = new Gson();
+    private static final String CONFIG_FILE_PATH = "config/betterambience.json";
+    private static float fogTransitionTime = 2.0f; // Tempo padrão
+
+
+    public static void initialize() {
+        File configDir = new File("config");
+        if (!configDir.exists()) {
+            boolean created = configDir.mkdirs();
+            if (created) {
+                System.out.println("Diretório 'config' criado.");
+            } else {
+                System.err.println("Falha ao criar o diretório 'config'.");
+            }
+        }
+
+        File configFile = new File(CONFIG_FILE_PATH);
+
+        if (!configFile.exists()) {
+            // Se o arquivo de configuração não existir, crie-o com valores padrão
+            createDefaultConfig(configFile);
+        }
+
+        // Carregar configurações do arquivo
+        loadConfig(configFile);
+    }
+
+    private static void createDefaultConfig(File configFile) {
+        JsonObject root = new JsonObject();
+        JsonObject biomes = new JsonObject();
+
+        JsonObject plains = new JsonObject();
+        plains.addProperty("fogStart", 10.0);
+        plains.addProperty("fogEnd", 80.0);
+        plains.add("fogColor", GSON.toJsonTree(new float[]{0.7f, 0.8f, 0.9f}));
+        biomes.add("minecraft:plains", plains);
+
+        JsonObject desert = new JsonObject();
+        desert.addProperty("fogStart", 20.0);
+        desert.addProperty("fogEnd", 150.0);
+        desert.add("fogColor", GSON.toJsonTree(new float[]{1.0f, 0.9f, 0.6f}));
+        biomes.add("minecraft:desert", desert);
+
+        root.add("biomes", biomes);
+
+        JsonObject defaultFog = new JsonObject();
+        defaultFog.addProperty("fogStart", 50.0);
+        defaultFog.addProperty("fogEnd", 200.0);
+        defaultFog.add("fogColor", GSON.toJsonTree(new float[]{0.5f, 0.5f, 0.5f}));
+        root.add("default", defaultFog);
+
+        try (FileWriter writer = new FileWriter(configFile)) {
+            GSON.toJson(root, writer);
+            System.out.println("Arquivo 'betterambience.json' criado com valores padrão.");
+        } catch (IOException e) {
+            System.err.println("Erro ao criar configuração: " + e.getMessage());
+        }
+    }
+
+    public static void loadConfig(File configFile) {
+        try (FileReader reader = new FileReader(configFile)) {
+            JsonObject root = JsonParser.parseReader(reader).getAsJsonObject();
+
+            // Carregar biomas
+            JsonObject biomes = root.getAsJsonObject("biomes");
+            for (String biomeId : biomes.keySet()) {
+                JsonObject fogConfig = biomes.getAsJsonObject(biomeId);
+                float fogStart = fogConfig.get("fogStart").getAsFloat();
+                float fogEnd = fogConfig.get("fogEnd").getAsFloat();
+                float[] fogColor = GSON.fromJson(fogConfig.get("fogColor"), float[].class);
+
+                if (fogColor.length != 3) {
+                    System.err.println("Erro: fogColor do bioma '" + biomeId + "' deve ter 3 componentes (RGB).");
+                    continue;
+                }
+
+                RegistryKey<Biome> biomeKey = RegistryKey.of(RegistryKeys.BIOME, Identifier.of(biomeId));
+                BIOME_FOG_MAP.put(biomeKey, new FogProperties(fogStart, fogEnd, fogColor));
+            }
+
+            // Carregar tempo de transição da neblina
+            if (root.has("fogTransitionTime")) {
+                fogTransitionTime = root.get("fogTransitionTime").getAsFloat();
+            }
+
+            System.out.println("Configuração de neblina carregada com sucesso.");
+        } catch (IOException | IllegalStateException e) {
+            System.err.println("Erro ao processar configuração: " + e.getMessage());
+        }
+    }
+
+    public static float getFogTransitionTime() {
+        return fogTransitionTime;
+    }
+
+
+
+
+    public static FogProperties getFogProperties(RegistryEntry<Biome> biome) {
+        RegistryKey<Biome> biomeKey = biome.getKey().orElse(null);
+        if (biomeKey != null && BIOME_FOG_MAP.containsKey(biomeKey)) {
+            return BIOME_FOG_MAP.get(biomeKey);
+        }
+
+        // Retornar valores padrão se o bioma não estiver mapeado
+        return new FogProperties(0.0f, 100.0f, new float[]{0.5f, 0.5f, 0.5f});
+    }
+
+    public static void reloadConfig() {
+        System.out.println("Tentando recarregar a configuração da neblina...");
+        File configFile = new File(CONFIG_FILE_PATH);
+        if (configFile.exists()) {
+            loadConfig(configFile);
+        } else {
+            System.err.println("Arquivo de configuração não encontrado: " + CONFIG_FILE_PATH);
+        }
+    }
+
+
+}
+
+package com.muryko.betterambience.fog;
+
+// Classe para definir propriedades de neblina
+public class FogProperties {
+    private final float fogStart;
+    private final float fogEnd;
+    private final float[] fogColor;
+
+    public FogProperties(float fogStart, float fogEnd, float[] fogColor) {
+        this.fogStart = fogStart;
+        this.fogEnd = fogEnd;
+        this.fogColor = fogColor;
+    }
+
+    public float getFogStart() {
+        return fogStart;
+    }
+
+    public float getFogEnd() {
+        return fogEnd;
+    }
+
+    public float[] getFogColor() {
+        return fogColor;
+    }
+}
+
+package com.muryko.betterambience.fog;
+
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.registry.entry.RegistryEntry;
+
+public class FogRendererHelper {
+    private static RegistryEntry<Biome> lastBiome = null;
+
+    public static void applyFog(World world, BlockPos playerPos) {
+        RegistryEntry<Biome> currentBiome = world.getBiome(playerPos);
+        if (lastBiome == currentBiome) return; // Evita reiniciar a transição desnecessariamente
+
+        lastBiome = currentBiome;
+        FogProperties fogProperties = FogBiomeRegistry.getFogProperties(currentBiome);
+
+        // Iniciar uma nova transição para o bioma atual
+        FogTransitionManager.startTransition(fogProperties);
+    }
+}
+
+
+package com.muryko.betterambience.fog;
+
+import com.mojang.blaze3d.systems.RenderSystem;
+
+public class FogTransitionManager {
+    private static float[] currentFogColor = {0.5f, 0.5f, 0.5f};
+    private static float currentFogStart = 50.0f;
+    private static float currentFogEnd = 200.0f;
+
+    private static float transitionProgress = 1.0f; // 1.0 significa que a transição terminou
+    private static FogProperties targetFog;
+
+    public static void updateTransition(float deltaTime) {
+        if (transitionProgress < 1.0f && targetFog != null) {
+            // Interpolar as propriedades da neblina
+            transitionProgress += deltaTime / FogBiomeRegistry.getFogTransitionTime();
+            transitionProgress = Math.min(transitionProgress, 1.0f);
+
+            float[] targetColor = targetFog.getFogColor();
+            currentFogColor = interpolateColor(currentFogColor, targetColor, transitionProgress);
+            currentFogStart = interpolateValue(currentFogStart, targetFog.getFogStart(), transitionProgress);
+            currentFogEnd = interpolateValue(currentFogEnd, targetFog.getFogEnd(), transitionProgress);
+        }
+
+        // Aplicar neblina em todos os frames/ticks
+        applyFog();
+    }
+
+    public static void startTransition(FogProperties newFog) {
+        targetFog = newFog;
+        transitionProgress = 0.0f;
+    }
+
+    private static float[] interpolateColor(float[] start, float[] end, float progress) {
+        return new float[]{
+            start[0] + (end[0] - start[0]) * progress,
+            start[1] + (end[1] - start[1]) * progress,
+            start[2] + (end[2] - start[2]) * progress
+        };
+    }
+
+    private static float interpolateValue(float start, float end, float progress) {
+        return start + (end - start) * progress;
+    }
+
+    private static void applyFog() {
+        RenderSystem.setShaderFogColor(currentFogColor[0], currentFogColor[1], currentFogColor[2]);
+        RenderSystem.setShaderFogStart(currentFogStart);
+        RenderSystem.setShaderFogEnd(currentFogEnd);
+    }
+}
+
+
+
+
+package com.muryko.betterambience.mixin;
+
+import com.muryko.betterambience.MurykosBetterAmbienceClient;
+import net.minecraft.client.render.BackgroundRenderer;
+import net.minecraft.client.render.Camera;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+@Mixin(BackgroundRenderer.class)
+public class FogRendererMixin {
+    @Inject(method = "applyFog", at = @At("HEAD"), cancellable = true)
+    private static void applyCustomFog(
+        Camera camera,
+        BackgroundRenderer.FogType fogType,
+        float viewDistance,
+        boolean thickFog,
+        float tickDelta,
+        CallbackInfo ci
+    ) {
+        // Aplicar neblina com base no delta atual
+        MurykosBetterAmbienceClient.applyFog(camera, tickDelta);
+
+        // Cancelar a aplicação vanilla para evitar interferência
+        ci.cancel();
+    }
+}
+
+
+
+package com.muryko.betterambience;
+
+import com.muryko.betterambience.command.BetterAmbienceCommands;
+import com.muryko.betterambience.fog.FogBiomeRegistry;
+import com.muryko.betterambience.fog.FogProperties;
+import com.muryko.betterambience.fog.FogRendererHelper;
+import com.muryko.betterambience.fog.FogTransitionManager;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.render.Camera;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+
+public class MurykosBetterAmbienceClient implements ClientModInitializer {
+    @Override
+    public void onInitializeClient() {
+        // Inicializar o registro de biomas e suas propriedades
+        FogBiomeRegistry.initialize();
+        BetterAmbienceCommands.register();
+
+        System.out.println("BetterAmbience mod initialized com transição suave de neblina!");
+    }
+
+    public static void applyFog(Camera camera, float tickDelta) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        ClientPlayerEntity player = client.player;
+        if (player == null) return;
+
+        World world = player.getWorld();
+        BlockPos playerPos = player.getBlockPos();
+
+        // Atualizar transição a cada tick de renderização
+        FogTransitionManager.updateTransition(tickDelta);
+
+        // Iniciar nova transição, se necessário
+        RegistryEntry<Biome> currentBiome = world.getBiome(playerPos);
+        FogProperties newFog = FogBiomeRegistry.getFogProperties(currentBiome);
+        FogTransitionManager.startTransition(newFog);
+    }
+}
